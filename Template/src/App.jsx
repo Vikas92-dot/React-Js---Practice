@@ -1,6 +1,7 @@
 import { Component } from "react";
 import MultiCounter from "./MultiCounter";
 import Product from "./Category";
+import ProductPage from "./ProductPage";
 
 class App extends Component{
   constructor(){
@@ -16,7 +17,7 @@ class App extends Component{
   }
   render(){
     return <>
-      <Product />
+      <ProductPage />
      
     </>
   }
