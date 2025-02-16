@@ -14,7 +14,19 @@ export default[
     {
         title: "Button",
         Date: new Date().toLocaleDateString('en-GB'), // Formatted as date/month/year,
-        Status: "Active",
+        Status: "Deactive",
         priority: "Low"
+    },
+    {
+        title: "Create database",
+        Date: new Date().toLocaleDateString('en-GB'), // Formatted as date/month/year,
+        Status: "Deactive",
+        priority: "High"
+    },
+    {
+        title: "Create SRS",
+        Date: new Date().toLocaleDateString('en-GB'), // Formatted as date/month/year,
+        Status: "Active",
+        priority: "Medium"
     }
 ]

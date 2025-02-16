@@ -1,11 +1,32 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Header from "./components/Header";
 import AllTask from './components/Data';
 
 function App(){
   const[priority,setPriority] = useState(["High","Medium","Low"]);
   const [Tasks,setTask] = useState(AllTask);
+  const[taskDate, setTaskDate] = useState(new Date().toLocaleDateString("en-GB"));
   const[defaultStatus,setDefaultStatus] = useState("Active");
+
+  let titleInput = useRef();
+  let priorityInput = useRef();
+
+
+  const addTask =()=>{
+    let title = titleInput.current.value;
+    let priority = priorityInput.current.value;
+    
+
+    setTask([...Tasks,{title,Date:taskDate,Status: "Active",priority}]);
+  }
+  const toggleStatus = (taskTitle) => {
+    setTask(
+      Tasks.map((task) =>
+        task.title === taskTitle ? { ...task, Status: task.Status === "Active" ? "Deactive" : "Active" } : task
+      )
+    );
+  };
+
   
   return<>
         <div className="bg-primary p-3" >
@@ -14,24 +35,24 @@ function App(){
     <div className="container mt-4">
         <div className="row">
             <div className="col-md-6">
-              <input className="form-control" type="text" placeholder="Enter Title" />
+              <input ref={titleInput} className="form-control" type="text" placeholder="Enter Title" />
             </div>
             <div className="col-md-6">
-              <select className="form-control">
-                <option value="0">Select priority</option>
-                {priority.map((prior)=><option>{prior}</option>)}
+              <select ref={priorityInput} className="form-control">
+                <option  value="0">Select priority</option>
+                {priority.map((prior)=><option value={prior}>{prior}</option>)}
               </select>
             </div>
         </div>
         <div className="row mt-4 mb-4">
           <div className="col-md-6">
-            <button className="btn btn-outline-success">Add</button>
+            <button onClick={addTask} className="btn btn-outline-success">Add</button>
           </div>
         </div>
         <div className="row mt-2 mb-3">
           <div className="col-md-6">
-            <button className="btn btn-success">Active: {Tasks.filter((task)=>task.Status === "Active").length}</button>
-            <button className="btn btn-danger ml-2">Deactive: {Tasks.filter((task)=>task.Status === "Deactive").length}</button>
+            <button onClick={()=>setDefaultStatus("Active")} className="btn btn-success">Active: {Tasks.filter((task)=>task.Status === "Active").length}</button>
+            <button onClick={()=>setDefaultStatus("Deactive")} className="btn btn-danger ml-2">Deactive: {Tasks.filter((task)=>task.Status === "Deactive").length}</button>
           </div>
         </div>
     
@@ -46,7 +67,7 @@ function App(){
         </tr>
       </thead>
       <tbody>
-          {Tasks.map((task,index)=><tr key={index} 
+          {Tasks.filter((task)=>{return task.Status == defaultStatus}).map((task,index)=><tr key={index} 
           style={{ backgroundColor:
             task.priority === "High"
               ? "#ed5a5a"
@@ -59,7 +80,9 @@ function App(){
             <td>{task.title}</td>
             <td>{task.Date}</td>
             <td>{task.priority}</td>
-            <td>{task.Status}</td>      
+            <td>
+              <button onClick={()=> toggleStatus(task.title)} className={task.Status == "Active" ? "btn btn-danger" : "btn btn-success"}>{task.Status == "Active" ? "Deactive" : "Active"}</button>
+            </td>      
 
 
           </tr>)}
